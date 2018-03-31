@@ -1,6 +1,9 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.9
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
+
+
 
 ApplicationWindow {
     visible: true
@@ -8,30 +11,66 @@ ApplicationWindow {
     height: 480
     title: qsTr("Hello World")
 
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+    menuBar: MenuBar{
+        Menu{
+            title: qsTr("File")
+            Action{
+                text: qsTr("Select COM Port")
+                onTriggered: {
+                    portsel.open();
+                }
 
-        Page1 {
-        }
+            }
+            Action{
+                text: qsTr("Load")
+                onTriggered: {
+                    filechooser.open()
+                }
 
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
+            }
+            MenuSeparator{
+
+            }
+            Action{
+                text: qsTr("Quit")
+                onTriggered: {
+                    Qt.quit();// Close Application
+                }
             }
         }
     }
+    CoreWindow{
+        id: win_core
+    }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("First")
+    FileDialog{
+        id: filechooser
+        title: qsTr("Choose File")
+        selectExisting: true
+        selectMultiple: false
+        nameFilters: ["CVS files (*.cvs)","All files (*)"]
+        folder: shortcuts.home
+        onAccepted: {
+            if(fileUrl === null){
+                win_core.setFilepath(filechooser.fileUrls[0]);
+            }
+            else{
+                win_core.setFilepath(filechooser.fileUrl);
+            }
+
+
         }
-        TabButton {
-            text: qsTr("Second")
+
+    }
+
+    ComportChooser{
+        id: portsel
+        onAccepted: {
+            console.log("Hello");
         }
     }
+
+
+
+
 }
