@@ -51,4 +51,9 @@ int RaceList::createListFromFile(QString Filepath){
 QList<QObject*> RaceList::list(){
     return this->p_list;
 }
+bool RaceList::sendToDevice(quint32 index){
+    Q_UNUSED(index)
+    /* generate string and send to Device via usb_wrapper */
+    return false;
+}
 

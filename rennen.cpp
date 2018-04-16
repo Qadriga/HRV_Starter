@@ -74,8 +74,4 @@ QVariantList Rennen::lanes(){
     //return this->p_lanes;
 
 }
-bool Rennen::sendToDevice(quint32 index){
-    Q_UNUSED(index)
-    /* generate string and send to Device via usb_wrapper */
-    return false;
-}
+

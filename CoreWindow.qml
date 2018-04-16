@@ -13,64 +13,138 @@ Item {
     ColumnLayout {
         anchors.fill: parent
         spacing: 2
-        ListView {
-            id: lv_sendqueue
-            width: parent.width
-            height: parent.height * 0.3
-            anchors.margins: 5
-            model: ct_racelist.list
 
-            Layout.alignment: Qt.AlignHCenter
-
-            Layout.preferredWidth: parent.width * 0.9
-
-            delegate: //RaceDelegate{ }
-                      RowLayout {
-
-                //width: parent.width
-                TextField {
-                    width: parent * 0.1
-                    text: modelData.index
-                }
-                TextField {
-                    width: parent * 0.1
-                    text: modelData.abteilung
-                }
-                TextField {
-                    text: modelData.rennNumber
-                }
-                Repeater {
-                    model: modelData.lanes
-                    delegate: Row {
-                        TextField{
-                            width: 20
-                            text: modelData.lane_Lable
-                        }
-
-                        TextField {
-                            width: 20
-                            text: modelData.time_delay
-                        }
-
-                    }
-                    onItemAdded: {
-
-                    }
-                }
-
-            }
-            spacing: 1
+        RowLayout {
         }
-        Button {
-            id: btn_send
-            Layout.alignment: Qt.AlignRight
-            text: qsTr("Send")
-            onClicked: {
-                console.log(test.url)
-                console.log(ct_racelist.rowCount())
+        Rectangle {
+            width: parent.width
+            height: parent.height * 0.4
+            border.width: 2
+            border.color: "darkgreen"
+            ListView {
+                id: lv_sendqueue
+                anchors.fill: parent
+                anchors.margins: 5
+                cacheBuffer: 50
+                header: Rectangle {
+                    width: parent.width
+                    RowLayout {
+                        width: parent.width
+                        Text {
+                            width: parent * 0.1
+                            text: qsTr("Index")
+                        }
+                        Text {
+                            width: parent * 0.1
+                            text: qsTr("Abteilung")
+                        }
+                        Text {
+                            width: parent * 0.1
+                            text: qsTr("RennNummer")
+                        }
+                        Text {
+                            text: qsTr("Bahnen")
+                        }
+                    }
+                }
+
+                model: ct_racelist.list
+                delegate: //RaceDelegate{ }
+                          Rectangle {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    border.width: 1
+                    border.color: "lightsteelblue"
+                    RowLayout {
+
+                        anchors.fill: parent
+                        TextField {
+                            width: parent * 0.1
+                            text: modelData.index
+                        }
+                        TextField {
+                            width: parent * 0.1
+                            text: modelData.abteilung
+                        }
+                        TextField {
+                            text: modelData.rennNumber
+                        }
+                        Repeater {
+                            model: modelData.lanes
+                            delegate: Row {
+                                TextField {
+                                    width: 20
+                                    text: modelData.lane_Lable
+                                }
+
+                                TextField {
+                                    width: 20
+                                    text: modelData.time_delay
+                                }
+                            }
+                            onItemAdded: {
+
+                            }
+                        }
+                    }
+                }
+                spacing: 30
+                onCountChanged: {
+                    console.log(count)
+                }
+            }
+        }
+        RowLayout {
+            width: parent.width
+            layoutDirection: Qt.RightToLeft
+            Rectangle {
+                id: rc_sendtext
+                implicitWidth: 100
+                width: tv_sendtext.width
+                height: 20
+                Text {
+
+                    id: tv_sendtext
+                }
+                onColorChanged: {
+                    if (color !== "yellow" || color !== "transparent") {
+                        timer_reset.start()
+                        console.log("Timer Start")
+                    }
+                }
+            }
+            Timer {
+                id: timer_reset
+                repeat: false
+                interval: 5000
+                onTriggered: {
+
+                    tv_sendtext.text = ""
+                    rc_sendtext.color = "transparent"
+                }
+            }
+
+            Button {
+                id: btn_send
+
+                text: qsTr("Send")
+                onClicked: {
+                    rc_sendtext.color = "yellow"
+                    tv_sendtext.text = "Sending"
+                    if (ct_racelist.sendToDevice()) {
+                        console.log("Sended")
+                        rc_sendtext.color = "green"
+                        tv_sendtext.text = "Gesendet"
+                    } else {
+                        console.log("FAILED")
+                        tv_sendtext.text = "Fehlgeschlagen"
+                        rc_sendtext.color = "red"
+                    }
+                }
             }
         }
     }
+
     RaceList {
         id: ct_racelist
     }

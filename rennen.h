@@ -35,13 +35,13 @@ signals:
     void AbteilungChanged(void);
     void RennNumberChanged(void);
     void LanesChanged(void);
-    void TransmissionSuccess(QString Data);
+
 
 public slots:
     void setIndex(unsigned short newIndex);
     void setAbteilung(unsigned short);
     void setRennNumber(QString newNumber);
-    bool sendToDevice(quint32 index = 0);
+
 
 };
 

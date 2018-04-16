@@ -23,10 +23,12 @@ public:
     //int columnCount(const QModelIndex &parent) const override;
 signals:
     void racelistChanged(void);
+    void TransmissionSuccess(QString Data);
 
 public slots:
     QObject* getAt(int idx);
     int createListFromFile(QString Filepath);
+    bool sendToDevice(quint32 index = 0);
 
 };
 
