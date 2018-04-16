@@ -4,5 +4,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>ComportChooser.qml</file>
         <file>CoreWindow.qml</file>
+        <file>RaceDelegate.qml</file>
     </qresource>
 </RCC>

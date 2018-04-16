@@ -9,22 +9,23 @@
 
 Q_DECLARE_METATYPE(Rennen*)
 
-class RaceList : public QAbstractListModel
+class RaceList : public QObject
 {
     Q_OBJECT
-    QList<Rennen*> p_list;
+    Q_PROPERTY(QList<QObject*> list READ list NOTIFY racelistChanged)
+
+    QList<QObject*> p_list;
 
 public:
     explicit RaceList(QObject *parent = nullptr);
     ~RaceList();
-    int rowCount(const QModelIndex &parent = QModelIndex() ) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
-
+    QList<QObject*> list();
     //int columnCount(const QModelIndex &parent) const override;
 signals:
     void racelistChanged(void);
+
 public slots:
-    Rennen* getAt(int idx);
+    QObject* getAt(int idx);
     int createListFromFile(QString Filepath);
 
 };

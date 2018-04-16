@@ -5,38 +5,24 @@
 #include <QUrl>
 
 
-RaceList::RaceList(QObject *parent) : QAbstractListModel(parent)
+RaceList::RaceList(QObject *parent) : QObject(parent)
 {
 
 }
 
 RaceList::~RaceList(){
-
-}
-int RaceList::rowCount(const QModelIndex &parent) const{
-    Q_UNUSED(parent)
-    return this->p_list.size();
-}
-
-QVariant RaceList::data(const QModelIndex &index, int role) const{
-    int i = index.row();
-    if(i < 0 || i >= p_list.size()){
-        return QVariant(QVariant::Invalid);
+    foreach (QObject* listitem, this->p_list) {
+        delete listitem;
     }
-    return QVariant::fromValue(p_list[i]);
 }
 
-Rennen* RaceList::getAt(int idx){
+QObject *RaceList::getAt(int idx){
     if(idx < 0 || idx >= this->p_list.size()){
         return nullptr;
     }
     return this->p_list[idx];
 }
-#if 0
-int RaceList::columnCount(const QModelIndex &parent) const{
 
-}
-#endif
 int RaceList::createListFromFile(QString Filepath){
     QFile i_file ;
     QUrl fileurl = QUrl(Filepath);
@@ -55,15 +41,14 @@ int RaceList::createListFromFile(QString Filepath){
 #ifdef QT_DEBUG
         qInfo() << QString(line) << endl;
 #endif        
-        this->beginInsertRows(QModelIndex(),rowCount(),rowCount());
         this->p_list.append(race_tmp);
-        this->endInsertRows();
-
-    }
-    //emit dataChanged();
-
+}
+    emit this->racelistChanged();
     i_file.close();
     return 0;
 }
 
+QList<QObject*> RaceList::list(){
+    return this->p_list;
+}
 

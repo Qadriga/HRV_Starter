@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     rennen.cpp \
     usb_wrapper.cpp \
-    racelist.cpp
+    racelist.cpp \
+    racelane.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,4 +41,5 @@ LIBS += -L/usr/local/lib -lusb-1.0
 HEADERS += \
     rennen.h \
     usb_wrapper.h \
-    racelist.h
+    racelist.h \
+    racelane.h
